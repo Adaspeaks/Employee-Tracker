@@ -29,7 +29,7 @@ function init() {
         readEmployees();
       } else if (data.mainMenu === "Add Department") {
         writeDepartment();
-      } else if (data.mainMenu === "Add Roles") {
+      } else if (data.mainMenu === "Add Role") {
         writeRole();
       } else if (data.mainMenu === "Add Employee") {
         writeEmployee();
@@ -113,7 +113,8 @@ function writeRole() {
       });
       readRoles();
     });
-}
+};
+
 function writeEmployee() {
   inquirer
     .prompt([
@@ -147,7 +148,7 @@ function writeEmployee() {
       });
       readEmployees();
     });
-}
+};
 
 function updateRole() {
   connection.query("SELECT * FROM role", (err, data) => {
