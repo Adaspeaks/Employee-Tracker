@@ -109,7 +109,7 @@ function writeRole() {
       connection.query("INSERT INTO role SET ?", {
         title: data.role,
         salary: data.salary,
-        department_id: data.department_id,
+        department_id: data.departmentID,
       });
       readRoles();
     });
