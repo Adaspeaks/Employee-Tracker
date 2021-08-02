@@ -86,56 +86,38 @@ function writeDepartment() {
     });
 }
 
-function writeRoles() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "role",
-        message: "What is the name of the new role?",
-      },
-      {
-        type: "input",
-        name: "salary",
-        message: "What is the Salary for this role?",
-      },
-      {
-        type: "input",
-        name: "departmentID",
-        message: "what is the department ID for this role?",
-      },
-    ])
-    .then(function (data) {
-      connection.query("INSERT INTO role SET ?", {
-        title: data.role,
-        salary: data.salary,
-        department_id: data.departmentID,
-      });
-      readRoles();
-    });
-}
-function updateRole(){
-  connection.query("SELECT * FROM role", (err, data) =>{
+function updateRole() {
+  connection.query("SELECT * FROM role", (err, data) => {
     if (err) throw err;
-    inquirer.prompt([
-      {
-        message: "what is the ID of the employee whose role you'd like to change?",
-        name: "id",
-      },
-      {
-        message: "What is the new role Id you'd like to give them?",
-        name: "role_id",
-      }
-    ])
-    .then (function(data) {
-      connection.query("UPDATE employee SET role_id = ? WHERE id = ?", {
-        role_id: data.role_id,
-        id: data.id
+    // console.log(data);
+    const choices = data.map((role) => role.title);
+    console.log(choices);
+
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "oldRole",
+          message: "Which role would you like to update?",
+          choices: choices,
+        },
+        {
+          type: "input",
+          name: "newRole",
+          message: "What would you like to rename this role?",
+        },
+      ])
+      .then(function (data) {
+        console.log(data.newRole);
+        connection.query(
+          `UPDATE role SET ? WHERE ?`,
+          [{ title: `${data.newRole}` }, { title: `${data.oldRole}` }],
+            readRoles()
+        );
       });
-      readEmployees();
-    });
   });
 }
+
 connection.connect((err) => {
   if (err) throw err;
   init();
