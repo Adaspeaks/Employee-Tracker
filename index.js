@@ -153,7 +153,6 @@ function writeEmployee() {
 function updateRole() {
   connection.query("SELECT * FROM role", (err, data) => {
     if (err) throw err;
-    // console.log(data);
     const choices = data.map((role) => role.title);
     console.log(choices);
 
