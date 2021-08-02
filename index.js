@@ -109,7 +109,7 @@ function writeRole() {
       connection.query("INSERT INTO role SET ?", {
         title: data.role,
         salary: data.salary,
-        department_id: data.departmentID,
+        department_id: data.departmentid,
       });
       readRoles();
     });
@@ -121,7 +121,7 @@ function writeEmployee() {
       {
         type: "input",
         name: "firstName",
-        message: "What is the new employee's first name??",
+        message: "What is the new employee's first name?",
       },
       {
         type: "input",
@@ -140,7 +140,7 @@ function writeEmployee() {
       },
     ])
     .then(function (data) {
-      connection.query("INSERT INTO role SET ?", {
+      connection.query("INSERT INTO employee SET ?", {
         first_name: data.firstName,
         last_Name: data.lastName,
         role_id: data.roleId,
@@ -175,11 +175,11 @@ function updateRole() {
         connection.query(
           `UPDATE role SET ? WHERE ?`,
           [{ title: `${data.newRole}` }, { title: `${data.oldRole}` }],
-          readRoles()
         );
+        readRoles();
       });
   });
-}
+};
 
 connection.connect((err) => {
   if (err) throw err;
