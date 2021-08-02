@@ -13,7 +13,6 @@ function init() {
         "View Departments",
         "View Roles",
         "View Employees",
-        "View Employees by Manager",
         "Add Department",
         "Add Role",
         "Add Employee",
@@ -28,12 +27,10 @@ function init() {
         readRoles();
       } else if (data.mainMenu === "View Employees") {
         readEmployees();
-      } else if (data.mainMenu === "View Employees by Manager") {
-        readEmployeesMng();
       } else if (data.mainMenu === "Add Department") {
         writeDepartment();
       } else if (data.mainMenu === "Add Roles") {
-        writeRole();
+        writeRoles();
       } else if (data.mainMenu === "Add Employee") {
         writeEmployee();
       } else if (data.mainMenu === "Update Employee's Roles") {
@@ -74,6 +71,71 @@ function readEmployees() {
   });
 }
 
+function writeDepartment() {
+  inquirer
+    .prompt({
+      type: "input",
+      name: "department",
+      message: "What is the name of the new department?",
+    })
+    .then(function (data) {
+      connection.query("INSERT INTO department SET ?", {
+        name: data.department,
+      });
+      readDepartment();
+    });
+}
+
+function writeRoles() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "role",
+        message: "What is the name of the new role?",
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "What is the Salary for this role?",
+      },
+      {
+        type: "input",
+        name: "departmentID",
+        message: "what is the department ID for this role?",
+      },
+    ])
+    .then(function (data) {
+      connection.query("INSERT INTO role SET ?", {
+        title: data.role,
+        salary: data.salary,
+        department_id: data.departmentID,
+      });
+      readRoles();
+    });
+}
+function updateRole(){
+  connection.query("SELECT * FROM role", (err, data) =>{
+    if (err) throw err;
+    inquirer.prompt([
+      {
+        message: "what is the ID of the employee whose role you'd like to change?",
+        name: "id",
+      },
+      {
+        message: "What is the new role Id you'd like to give them?",
+        name: "role_id",
+      }
+    ])
+    .then (function(data) {
+      connection.query("UPDATE employee SET role_id = ? WHERE id = ?", {
+        role_id: data.role_id,
+        id: data.id
+      });
+      readEmployees();
+    });
+  });
+}
 connection.connect((err) => {
   if (err) throw err;
   init();
