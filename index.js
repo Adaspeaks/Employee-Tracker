@@ -86,37 +86,68 @@ function writeDepartment() {
     });
 }
 
-function writeRole(){
+function writeRole() {
   inquirer
-  .prompt([
-    {
-    type: "input",
-    name: "role",
-    message: "What is the name of the new role?"
-    },
-    {
-    type: "input",
-    name: "salary",
-    message: "What is this new role's salary?"
-    },
-    {
-    type: "input",
-    name: "departmentID",
-    message: "What is the department id for this role?"
-    },
-  ])
-  .then(function(data) {
-
-      connection.query("INSERT INTO role SET ?",{
+    .prompt([
+      {
+        type: "input",
+        name: "role",
+        message: "What is the name of the new role?",
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "What is this new role's salary?",
+      },
+      {
+        type: "input",
+        name: "departmentID",
+        message: "What is the department id for this role?",
+      },
+    ])
+    .then(function (data) {
+      connection.query("INSERT INTO role SET ?", {
         title: data.role,
         salary: data.salary,
-        department_id: data.department_id
-      }
-      );
+        department_id: data.department_id,
+      });
       readRoles();
-  });
-};
-
+    });
+}
+function writeEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "firstName",
+        message: "What is the new employee's first name??",
+      },
+      {
+        type: "input",
+        name: "lastName",
+        message: "Their last name?",
+      },
+      {
+        type: "input",
+        name: "roleId",
+        message: "Their role Id?",
+      },
+      {
+        type: "input",
+        name: "managerId",
+        message: "Their managers id?(If any)",
+      },
+    ])
+    .then(function (data) {
+      connection.query("INSERT INTO role SET ?", {
+        first_name: data.firstName,
+        last_Name: data.lastName,
+        role_id: data.roleId,
+        manager_id: data.managerId,
+      });
+      readEmployees();
+    });
+}
 
 function updateRole() {
   connection.query("SELECT * FROM role", (err, data) => {
@@ -144,7 +175,7 @@ function updateRole() {
         connection.query(
           `UPDATE role SET ? WHERE ?`,
           [{ title: `${data.newRole}` }, { title: `${data.oldRole}` }],
-            readRoles()
+          readRoles()
         );
       });
   });
