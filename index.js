@@ -30,7 +30,7 @@ function init() {
       } else if (data.mainMenu === "Add Department") {
         writeDepartment();
       } else if (data.mainMenu === "Add Roles") {
-        writeRoles();
+        writeRole();
       } else if (data.mainMenu === "Add Employee") {
         writeEmployee();
       } else if (data.mainMenu === "Update Employee's Roles") {
@@ -85,6 +85,38 @@ function writeDepartment() {
       readDepartment();
     });
 }
+
+function writeRole(){
+  inquirer
+  .prompt([
+    {
+    type: "input",
+    name: "role",
+    message: "What is the name of the new role?"
+    },
+    {
+    type: "input",
+    name: "salary",
+    message: "What is this new role's salary?"
+    },
+    {
+    type: "input",
+    name: "departmentID",
+    message: "What is the department id for this role?"
+    },
+  ])
+  .then(function(data) {
+
+      connection.query("INSERT INTO role SET ?",{
+        title: data.role,
+        salary: data.salary,
+        department_id: data.department_id
+      }
+      );
+      readRoles();
+  });
+};
+
 
 function updateRole() {
   connection.query("SELECT * FROM role", (err, data) => {
